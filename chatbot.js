@@ -21,7 +21,6 @@ $(window).load(function () {
     $messages.mCustomScrollbar();
     setTimeout(function () {
         fakeMessage();
-        //userTextTry(flag);
     }, 100);
 });
 // for updating scroll bar
@@ -39,41 +38,21 @@ function setDate() {
         $('<div class="timestamp">' + d.getHours() + ':' + m + '</div>').appendTo($('.message:last'));
     }
 }
-//after inserting a message in a message-box
-/*function insertMessage() {
-  msg = $('.message-input').val();
-  if ($.trim(msg) == '') {
-    return false;
-  }
-  $('<div class="message message-personal">' + msg + '</div>').appendTo($('.mCSB_container')).addClass('new');
-  setDate();
-  $('.message-input').val(null);
-  updateScrollbar();
-  setTimeout(function() {
-    fakeMessage();
-  }, 1000 + (Math.random() * 20) * 100);
-}*/
-
-//on submiting message and clicking enter it calls insertMessage function.
 
 //onclick function
 $('.message-submit').click(function () {
     if (text == null || text == "") {
         flag = 0;
-        console.log("start here");
         //fetches the input value and creates a chat card
         text = $('.message-input').val();
-        console.log("The text is 1:" + text);
         $('<div class="message message-personal"><figure class="avatar1"><img src="img/team.png" /></figure><span></span>' + text + '</div>').appendTo($('.mCSB_container')).addClass('new');
         //calls the main function
         setDate();
-        console.log("calling user try 1");
         userTextTry();
         //clear the input value
         $('.message-input').val('');
 
     } else {
-        console.log("The flag value is: " + flag);
         additionText = $('.message-input').val();
         $('<div class="message message-personal"><figure class="avatar1"><img src="img/team.png" /></figure><span></span>' + additionText + '</div>').appendTo($('.mCSB_container')).addClass('new');
         setDate();
@@ -89,20 +68,16 @@ $(window).on('keydown', function (e) {
     if (e.which == 13) {
         if (text == null || text == "") {
             flag = 0;
-            console.log("start here");
             //fetches the input value and creates a chat card
             text = $('.message-input').val();
-            console.log("The text is 1:" + text);
             $('<div class="message message-personal"><figure class="avatar1"><img src="img/team.png" /></figure><span></span>' + text + '</div>').appendTo($('.mCSB_container')).addClass('new');
             //calls the main function
             setDate();
-            console.log("calling user try 1");
             userTextTry();
             //clear the input value
             $('.message-input').val('');
 
         } else {
-            console.log("The flag value is: " + flag);
             additionText = $('.message-input').val();
             $('<div class="message message-personal"><figure class="avatar1"><img src="img/team.png" /></figure><span></span>' + additionText + '</div>').appendTo($('.mCSB_container')).addClass('new');
             setDate();
@@ -143,14 +118,8 @@ function fakeMessage() {
 
 function userTextTry() {
 
-    //alert(text);
-
     //calling post function
-    console.log("function call 1");
     dialogFlowGet(text);
-    //dialogFlowPost(text);
-    //dialogFlow(text);
-    //window.setTimeout(dialogFlow(text), 2500);
 
 };
 
@@ -168,8 +137,6 @@ function dialogFlowPost(text) {
     }
     dataPostBody.query = text;
     dataPostBody.sessionId = num.toString();
-    //console.log("The query is 2: ");
-    //console.log(dataPostBody.query);
     var postBodyString = JSON.stringify(dataPostBody);
     http.open('POST', url, true);
 
@@ -179,26 +146,10 @@ function dialogFlowPost(text) {
 
     http.onreadystatechange = function () {//Call a function when the state changes.
         if (http.readyState == 4 && http.status == 200) {
-            //console.log("The http response is: 3 ");
-            // console.log(http.responseText);
-            // console.log("the post is hit here 4");
-
             diaResponse = http.responseText;
-            // console.log("The diaResponse is 5:");
-            //  console.log(diaResponse);
             event.preventDefault();
-            //  console.log(typeof(diaResponse));
             var diaResponseJson = JSON.parse(diaResponse);
             conditionString = diaResponseJson.result.metadata.intentName;
-            //  console.log("The intent is 6:");
-            //  console.log(conditionString);
-            /* if (conditionString == "Weather") {
-            //     console.log("7");
-                 accuWeather();
-             } else {
-                 ///defaultWeather();
-            //     console.log("Will call default weather 7");
-             }*/
             diaResponse = null;
         }
 
@@ -214,20 +165,16 @@ function dialogFlowGet(text) {
     http = new XMLHttpRequest();
     var num = Math.floor(Math.random() * 90000) + 10000;
     var url = 'https://api.dialogflow.com/v1/query?v=20150910&contexts=shop&lang=en&query=' + text + '&sessionId=' + num + '&timezone=Germany/Berlin';
-    console.log("text is: " + text);
     http.open('GET', url, true);
     http.setRequestHeader('Authorization', 'Bearer 54185c9cb2894ff9af002a9c0174ffa1');
     http.onreadystatechange = function () {//Call a function when the state changes.
         if (http.readyState == 4 && http.status == 200) {
-            console.log("The http response is: 3 ");
-            console.log(http.responseText);
-            console.log("the post is hit here 4");
+
 
             diaResponse = http.responseText;
-            console.log("The diaResponse is 5:");
-            console.log(diaResponse);
+
             event.preventDefault();
-            console.log(typeof (diaResponse));
+
             var diaResponseJson = JSON.parse(diaResponse);
             conditionString = diaResponseJson.result.metadata.intentName;
             speechString = diaResponseJson.result.fulfillment.speech;
@@ -235,9 +182,7 @@ function dialogFlowGet(text) {
             time = diaResponseJson.result.parameters.time;
             number = diaResponseJson.result.parameters.number;
 
-            console.log("The intent is 6:");
-            console.log(conditionString);
-            console.log("The place is: " + place + " The time is: " + time);
+
 
             if (speechString.includes("place") || speechString.includes("city") || speechString.includes("time") || conditionString == "Default Fallback Intent" || conditionString == "Default Welcome Intent" || diaResponseJson.result.action.includes("smalltalk")) {
 
@@ -246,7 +191,6 @@ function dialogFlowGet(text) {
 
             else {
                 getAccuLocationID();
-
 
             }
 
@@ -264,9 +208,9 @@ function getAccuLocationID() {
     dataLocationKey.onreadystatechange = function () {
         if (dataLocationKey.readyState == 4 && dataLocationKey.status == 200) {
             accuLocationJSONobj = JSON.parse(dataLocationKey.response);
-            console.log(accuLocationJSONobj);
+
             accuLocationID = accuLocationJSONobj[0].Key;
-            console.log("The location ID for " + place + " is " + accuLocationID);
+
             if (time == "today") {
                 accuWeather(accuLocationID);
             } else {
@@ -287,7 +231,7 @@ function accuWeather(accuLocationID) {
     dataAccuWeather.onreadystatechange = function () {
         if (dataAccuWeather.readyState == 4 && dataAccuWeather.status == 200) {
             var accJSONobj = JSON.parse(dataAccuWeather.response);
-            console.log(accJSONobj);
+
 
             accuAppropriatePrint(accJSONobj);
 
@@ -309,7 +253,7 @@ function openWeatherMap() {
             var OpenWeatherResponse = dataOpenWeather.responseText;
             //console.log(OpenWeatherResponse);
             var OpenWeatherResponseJson = JSON.parse(OpenWeatherResponse);
-            console.log(OpenWeatherResponseJson);
+
             openWeatherAppropriatePrint(OpenWeatherResponseJson);
         }
 
@@ -548,7 +492,7 @@ function openWeatherAppropriatePrint(OpenWeatherResponseJson) {
         var probText = " <i><b>PROBABILITY</b></i><br/>";
         var accuVariable_final_clouds = "-Cloud Probability is : " + final_clouds + " % " + "<br />";
         var windText = " <i><b>WIND DETAILS</b></i><br/>";
-        var accuVariable_final_windspeed = "-Wind Speed is : " + final_windspeed + "km/h"+ "<br />";
+        var accuVariable_final_windspeed = "-Wind Speed is : " + final_windspeed + "km/h" + "<br />";
         var accuVariable_final_winddeg = "-Wind Degree is : " + final_wind_deg + "degrees";
 
 
@@ -560,36 +504,25 @@ function openWeatherAppropriatePrint(OpenWeatherResponseJson) {
 
         if (conditionString == "Weather" && !speechString.includes("place") && !speechString.includes("time")) {
 
-            //var accuVariable = weatherHeading + tempText + accuVariable_final_temp_min + accuVariable_final_temp_max + sunText + accuVariable_final_sunrise + accuVariable_final_sunSet + realText + accuVariable_final_temp_feel_max + accuVariable_final_temp_feel_min + probText + accuVariable_final_rain_prob + accuVariable_final_snow_prob + accuVariable_final_windspeed;
-            /*if (i <= loopLength) {
-                weather = weather + textWeather;
-                console.log("The i value is:" + i);
-                console.log("The loopLength is: " + loopLength);
-                console.log("The added value is: " + weather);
-            }
-            if (i = loopLength) {
-                cardPrint(weather);
-
-            }*/
-            var j = i+1;
-            cardPrint("Day "+ j +": "+ textWeather);
+            var j = i + 1;
+            cardPrint("Day " + j + ": " + textWeather);
             text = null;
             //Below function is if the temperature, place and time is correctly specified
         } else if (conditionString == "Temperature" && !speechString.includes("place") && !speechString.includes("time")) {
 
             //var tempVariable =  weatherHeading + accuVariable_final_temp_min + accuVariable_final_temp_max + accuVariable_final_temp_feel_max + accuVariable_final_temp_feel_min;
-            var j = i+1;
-            cardPrint("Day "+ j +": "+ textTemperature);
+            var j = i + 1;
+            cardPrint("Day " + j + ": " + textTemperature);
             text = null;
             //Below function is if the place is not correctly specified
         } else if (conditionString == "Wind_speed" && !speechString.includes("place") && !speechString.includes("time")) {
 
-            var j = i+1;
-            cardPrint("Day "+ j +": "+ textWindSpeed);
+            var j = i + 1;
+            cardPrint("Day " + j + ": " + textWindSpeed);
             text = null;
-        } else{
-            var j = i+1;
-            cardPrint("Day "+ j +": "+ defaultText);
+        } else {
+            var j = i + 1;
+            cardPrint("Day " + j + ": " + defaultText);
             text = null;
         }
 
